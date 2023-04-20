@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-json
+      - id: mixed-line-ending
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: check-xml
+      - id: check-merge-conflict
+  - repo: https://github.com/kraymer/brack
+    rev: v1.0.0
+    hooks:
+      - id: brack
+        args: [-r, '[a-zA-Z0-9,.\_\-]+-[0-9]+']
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.17.0
+    hooks:
+      - id: check-github-actions
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.27.1
+    hooks:
+      - id: yamllint
+        files: \.(yaml|yml)$
+        types: [file, yaml]
+        args: ['-d {extends: relaxed, rules: {line-length: disable}}', -s]
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.2.2
+    hooks:
+      - id: yamlfmt
+        args: [--mapping, '2', --sequence, '4', --offset, '2', --implicit_start]
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: "2.1.6"
+    hooks:
+      - id: shellcheck
+        args: [--exclude=SC1090]
