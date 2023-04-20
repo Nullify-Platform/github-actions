@@ -22,7 +22,7 @@ module.exports = async (github, context) => {
     const latestPublishedTime = new Date(latestRelease.data.published_at);
 
     // extract major, minor and patch numbers from the latest release tag
-    const [major, minor, patch] = tagName.split(".").map((x) => parseInt(x));
+    const [major, minor, patch] = tagName.replace(/^v/, "").split(".").map((x) => parseInt(x));
 
     console.log('latestTag', tagName)
 
