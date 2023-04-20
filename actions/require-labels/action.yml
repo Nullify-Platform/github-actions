@@ -1,0 +1,33 @@
+---
+# Require labels to be added to a PR before merging
+# This is configured as a branch protection setting
+name: require-labels
+author: Nullify
+description: Blocks PRs from merging until SemVer label is applied
+branding:
+  icon: "cloud"
+  color: "purple"
+
+inputs:
+  labels:
+    description: Comma separated list of labels to match
+    required: false
+    default: "patch, minor, major, no-release"
+
+runs:
+  using: "composite"
+  steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+    - name: Require PR Labels
+      id: require-labels
+      uses: mheap/github-action-required-labels@v3
+      with:
+        mode: exactly
+        count: 1
+        labels: ${{ inputs.labels }}
+        exit_type: failure
+        add_comment: true
+        message: "This PR is being prevented from merging because you have not added exactly one label (${{ inputs.labels }})"

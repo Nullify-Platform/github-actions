@@ -1,0 +1,55 @@
+---
+name: PR Check - YAML Lint
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  yaml-lint:
+    name: yaml-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Get list of changed files
+        id: files
+        uses: tj-actions/changed-files@v18.7
+
+      - name: Get list of updated files to run yammlint
+        id: updatedFiles
+        run: |
+          for file in ${{ steps.files.outputs.all_changed_files }}; do
+            if [[ "$file" == *.yaml || "$file" == *.yml ]]
+            then
+              files=("${files[@]}" "$file")
+            fi
+          done
+          echo "::set-output name=files::${files[@]}"
+
+      - name: Lint YAML files
+        uses: karancode/yamllint-github-action@master
+        if: ${{ steps.updatedFiles.outputs.files }}
+        with:
+          yamllint_file_or_dir: ${{ steps.updatedFiles.outputs.files }}
+          yamllint_comment: true
+          yamllint_config_filepath: .github/workflows/.yamllint
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Add approvers. Only run once; Use a label for this.
+  add-reviewers:
+    if: "!contains( toJson(github), 'reviewers-set' )"
+    needs: [yaml-lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: add approvers
+        uses: kentaro-m/auto-assign-action@v1.2.0
+
+      - name: label reviewers-set
+        uses: andymckay/labeler@master
+        with:
+          add-labels: "reviewers-set"
