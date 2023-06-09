@@ -23,7 +23,7 @@ runs:
         fetch-depth: 1
     - name: Require PR Labels
       id: require-labels
-      uses: mheap/github-action-required-labels@v3
+      uses: mheap/github-action-required-labels@v5
       with:
         mode: exactly
         count: 1
