@@ -17,7 +17,7 @@ jobs:
 
       - name: Get list of changed files
         id: files
-        uses: tj-actions/changed-files@v18.7
+        uses: tj-actions/changed-files@v26.1
 
       - name: Get list of updated files to run yammlint
         id: updatedFiles
