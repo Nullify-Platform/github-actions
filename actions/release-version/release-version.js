@@ -32,6 +32,7 @@ module.exports = async (github, context) => {
         repo: context.repo.repo,
         state: 'closed',
         base: 'main',
+        merged: 'true',
     });
     const pullRequestsSinceLatestRelease = prs.filter(pr => new Date(pr.closed_at) > latestPublishedTime);
 
