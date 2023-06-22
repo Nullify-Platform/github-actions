@@ -88,10 +88,10 @@ runs:
           }
 
           return newVersion;
-      - name: Output Vars
-        id: vars
-        shell: sh
-        run: |
-          echo "previous_version=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))" >> $GITHUB_OUTPUT
-          echo "latest_version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-          echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+    - name: Output Vars
+      id: vars
+      shell: sh
+      run: |
+        echo "previous_version=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))" >> $GITHUB_OUTPUT
+        echo "latest_version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
