@@ -5,8 +5,17 @@ branding:
   color: 'purple'
 outputs:
   version: 
-    description: "Incremented SemVer"
+    description: "Determine the next tag version"
     value: ${{ steps.version.outputs.result }}
+  latest_version: 
+    description: "Look up latest tag version"
+    value: ${{ steps.vars.outputs.latest_version }}
+  previous_version: 
+    description: "Look up previous tag version"
+    value: ${{ steps.vars.outputs.previous_version }}
+  short_sha: 
+    description: "Look up short SHA"
+    value: ${{ steps.vars.outputs.short_sha }}
 runs:
   using: "composite"
   steps:
@@ -79,3 +88,10 @@ runs:
           }
 
           return newVersion;
+    - name: Output Vars
+      id: vars
+      shell: sh
+      run: |
+        echo "previous_version=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))" >> $GITHUB_OUTPUT
+        echo "latest_version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
