@@ -9,15 +9,23 @@ Our microservices use PR labels for Semantic Versioning. See [github-actions/rel
 ## Usage
 
 ```yaml
-name: Require Labels
+# Require labels to be added to a PR before merging
+# This is configured as a branch protection setting
+name: CI Require Labels
 on:
   pull_request:
     types: [opened, labeled, unlabeled, synchronize]
+  merge_group:
+run-name: CI Require Labels by @${{ github.actor }} ${{ github.sha }}
+permissions:
+  pull-requests: read
 jobs:
   require-labels:
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.require-labels.outputs.status }}
     steps:
-      - uses: actions/checkout@v3
       - name: Require Labels
         id: require-labels
         uses: nullify-platform/github-actions/actions/require-labels@main
