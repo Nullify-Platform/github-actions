@@ -7,20 +7,14 @@ description: Blocks PRs from merging until SemVer label is applied
 branding:
   icon: "cloud"
   color: "purple"
-
 inputs:
   labels:
     description: Comma separated list of labels to match
     required: false
     default: "patch, minor, major, no-release"
-
 runs:
   using: "composite"
   steps:
-    - name: checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 1
     - name: Require PR Labels
       id: require-labels
       uses: mheap/github-action-required-labels@v5
