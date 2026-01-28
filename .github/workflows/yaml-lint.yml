@@ -8,7 +8,7 @@ on:
 jobs:
   yaml-lint:
     name: yaml-lint
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
               files=("${files[@]}" "$file")
             fi
           done
-          echo "::set-output name=files::${files[@]}"
+          echo "files=${files[@]}" >> $GITHUB_OUTPUT
 
       - name: Lint YAML files
         uses: karancode/yamllint-github-action@master
@@ -44,7 +44,7 @@ jobs:
   add-reviewers:
     if: "!contains( toJson(github), 'reviewers-set' )"
     needs: [yaml-lint]
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: add approvers
         uses: kentaro-m/auto-assign-action@v2.0.0
