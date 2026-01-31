@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "octokit": "^4.0.0"
+    "octokit": "^5.0.0"
   }
 }

@@ -32,7 +32,7 @@ runs:
   steps:
     - name: Clean issues and PRs
       id: stale_issues_prs
-      uses: actions/stale@v9.1.0
+      uses: actions/stale@v10.1.1
       with:
         repo-token: ${{ inputs.token }}
         stale-issue-message: 'This issue is stale because it has been open ${{ inputs.days-before-pr-stale }} days with no activity. Remove stale label or comment or this will be closed in ${{ inputs.days-before-pr-delete }} days'
@@ -62,7 +62,7 @@ runs:
 
     - name: Clean branches
       id: cleanup_branches
-      uses: crs-k/stale-branches@v7.0.0
+      uses: crs-k/stale-branches@v8.2.2
       with:
         repo-token: ${{ inputs.token }}
         days-before-stale: ${{ inputs.days-before-branch-stale }}
