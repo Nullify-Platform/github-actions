@@ -18,11 +18,24 @@ module.exports = async (github, context) => {
         return newVersion;
     }
 
+    // validate tag is a plain semver (not a monorepo service-prefixed tag like "sast/8.11.3")
+    if (!/^v?\d+\.\d+\.\d+$/.test(tagName)) {
+        console.log(`latest release tag "${tagName}" is not a plain semver tag, treating as no release`);
+        console.log(`next version: ${newVersion}`);
+        return newVersion;
+    }
+
     console.log('latestPublishedTime', latestRelease.data.published_at)
     const latestPublishedTime = new Date(latestRelease.data.published_at);
 
     // extract major, minor and patch numbers from the latest release tag
     const [major, minor, patch] = tagName.replace(/^v/, "").split(".").map((x) => parseInt(x));
+
+    if (isNaN(major) || isNaN(minor) || isNaN(patch)) {
+        console.log(`Failed to parse version from tag "${tagName}", treating as no release`);
+        console.log(`next version: ${newVersion}`);
+        return newVersion;
+    }
 
     console.log('latestTag', tagName)
 
@@ -54,6 +67,10 @@ module.exports = async (github, context) => {
             : labels.includes('patch')
                 ? `${major}.${minor}.${patch + 1}`
                 : undefined;
+
+    if (newVersion && !/^\d+\.\d+\.\d+$/.test(newVersion)) {
+        throw new Error(`Computed invalid version "${newVersion}" - aborting to prevent corrupt release`);
+    }
 
     if (newVersion) {
         console.log(`next version: ${newVersion}`);
