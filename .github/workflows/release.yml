@@ -41,7 +41,7 @@ jobs:
       - name: Generate Release Tag
         run: echo "RELEASE_TAG=v${{ needs.get-version.outputs.version }}" >> $GITHUB_ENV
       - name: Generate Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: false
           generate_release_notes: true
