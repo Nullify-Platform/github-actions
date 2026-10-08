@@ -8,7 +8,7 @@ on:
 jobs:
   yaml-lint:
     name: yaml-lint
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: office-ci-small
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v6
@@ -44,7 +44,7 @@ jobs:
   add-reviewers:
     if: "!contains( toJson(github), 'reviewers-set' )"
     needs: [yaml-lint]
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: office-ci-small
     steps:
       - name: add approvers
         uses: kentaro-m/auto-assign-action@v2.0.2
