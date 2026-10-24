@@ -49,7 +49,7 @@ runs:
         remove-issue-stale-when-updated: true
         remove-pr-stale-when-updated: true
         exempt-all-milestones: true
-    
+
     - name: Print stale/closed Issues and PRs
       shell: bash
       env:

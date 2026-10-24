@@ -20,26 +20,31 @@ permissions:
   pull-requests: read
 jobs:
   get-version:
-    runs-on: office-ci-small
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.get-version.outputs.version }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - name: Get Release Version
         id: get-version
         uses: nullify-platform/github-actions/actions/release-version@main
       - run: |
-          echo "config-file-parser @ ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "VERSION:   ${{ steps.get-version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "SHORT_SHA: $(git rev-parse --short HEAD)" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "config-file-parser @ ${{ github.sha }}"
+            echo "VERSION:   ${{ steps.get-version.outputs.version }}"
+            echo "SHORT_SHA: $(git rev-parse --short HEAD)"
+          } >> "$GITHUB_STEP_SUMMARY"
   release:
     if: ${{ needs.get-version.outputs.version != 'undefined' || (github.event_name == 'workflow_dispatch' && needs.get-version.outputs.version != 'undefined') }}
-    runs-on: office-ci-small
-    needs: [ get-version ]
+    runs-on: ubuntu-24.04
+    needs: [get-version]
     steps:
       - uses: actions/checkout@v6
       - name: Generate Release Tag
-        run: echo "RELEASE_TAG=v${{ needs.get-version.outputs.version }}" >> $GITHUB_ENV
+        run: echo "RELEASE_TAG=v${{ needs.get-version.outputs.version }}" >> "$GITHUB_ENV"
       - name: Generate Release
         uses: softprops/action-gh-release@v3
         with:

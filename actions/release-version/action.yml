@@ -4,16 +4,16 @@ branding:
   icon: 'cloud'
   color: 'purple'
 outputs:
-  version: 
+  version:
     description: "Determine the next tag version"
     value: ${{ steps.version.outputs.result }}
-  latest_version: 
+  latest_version:
     description: "Look up latest tag version"
     value: ${{ steps.vars.outputs.latest_version }}
-  previous_version: 
+  previous_version:
     description: "Look up previous tag version"
     value: ${{ steps.vars.outputs.previous_version }}
-  short_sha: 
+  short_sha:
     description: "Look up short SHA"
     value: ${{ steps.vars.outputs.short_sha }}
 runs:
