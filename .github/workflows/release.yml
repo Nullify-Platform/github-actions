@@ -20,11 +20,11 @@ permissions:
   pull-requests: read
 jobs:
   get-version:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       version: ${{ steps.get-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -39,10 +39,10 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
   release:
     if: ${{ needs.get-version.outputs.version != 'undefined' || (github.event_name == 'workflow_dispatch' && needs.get-version.outputs.version != 'undefined') }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs: [get-version]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Generate Release Tag
         run: echo "RELEASE_TAG=v${{ needs.get-version.outputs.version }}" >> "$GITHUB_ENV"
       - name: Generate Release
